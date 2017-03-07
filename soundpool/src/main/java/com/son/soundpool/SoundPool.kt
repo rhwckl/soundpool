@@ -5,9 +5,9 @@ import android.media.AudioAttributes
 
 /**
  * Created by songc on 2017/02/21.
- * @param maxStreams 同時に再生できる効果音の数。デフォルトでは５つ。
+ * @param maxStreams 同時に再生できる効果音の数。デフォルトでは３つ。
  */
-class SoundPool(maxStreams: Int = 5) {
+class SoundPool(maxStreams: Int = 3) {
     val audioAttributes = AudioAttributes
             .Builder()
             .setUsage(AudioAttributes.USAGE_GAME)
@@ -19,18 +19,18 @@ class SoundPool(maxStreams: Int = 5) {
             .setMaxStreams(maxStreams)
             .build()
 
-    val aliases = mutableMapOf<String, Int>()
+    val aliases = mutableMapOf<Int, Int>()
 
-    fun load(context: Context, resourceId: Int, stringId: String) {
-        aliases[stringId] = soundPool.load(context, resourceId, 1)
+    fun load(context: Context, resourceId: Int) {
+        aliases[resourceId] = soundPool.load(context, resourceId, 1)
     }
 
-    fun unload(stringId: String) {
-        aliases[stringId]?.let { soundPool.unload(it) }
+    fun unload(resourceId: Int) {
+        aliases[resourceId]?.let { soundPool.unload(it) }
     }
 
-    fun play(stringId: String) {
-        aliases[stringId]?.let {
+    fun play(resourceId: Int) {
+        aliases[resourceId]?.let {
             soundPool.play(it, 1.0f, 1.0f, 0, 0, 1.0f)
         }
     }
